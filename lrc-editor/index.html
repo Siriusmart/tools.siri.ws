@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A professional, high-performance LRC editor and lyric syncing tool. Create, edit, and export timed lyrics with an intuitive chunk-based timeline.">
+    <meta name="keywords" content="LRC editor, lyric sync, timed lyrics, karaoke maker, subtitle editor, music production, lrc generator, lyric chunker">
+    <meta name="author" content="SiriusMart">
+    <meta name="color-scheme" content="dark">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tools.siri.ws/lrc-editor/">
+    <meta property="og:title" content="LRC Editor - Professional Lyric Syncing">
+    <meta property="og:description" content="Sync lyrics with precision. A high-performance web tool for creating and editing LRC files with a modern timeline interface.">
+    <meta property="og:image" content="https://tools.siri.ws/lrc-editor/og_image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://tools.siri.ws/lrc-editor/">
+    <meta property="twitter:title" content="LRC Editor - Professional Lyric Syncing">
+    <meta property="twitter:description" content="Sync lyrics with precision. A high-performance web tool for creating and editing LRC files with a modern timeline interface.">
+    <meta property="twitter:image" content="https://tools.siri.ws/lrc-editor/og_image.png">
+
+    <title>LRC Editor | Professional Lyric Syncing & Timed Lyrics</title>
+    
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" href="./favicon-9de891ee0692f41a.svg" integrity="sha384-DwnrV40zm02KSoN9lIa0XrTy+GZh+u8kFOkULotjgxu7p192o302uOQyDJlz+CxS"/>
+    
+    <link rel="stylesheet" href="./styles-b0f7cacab80a733e.css" integrity="sha384-P1pw4p7nZQ6IW/sdNsIaNT2PtqM3m0nlJ9E1BYpX1z3FQitad5MraAuV35wmswhR"/>
+    
+<script type="module">
+import init, * as bindings from './lrc-editor-54f5447948d4892.js';
+const wasm = await init({ module_or_path: './lrc-editor-54f5447948d4892_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+
+    <style>
+        /* Initial loading styles to keep the App Shell looking clean */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background: #1e1e1e;
+        }
+        .app-shell {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #1e1e1e;
+            color: #e0e0e0;
+            height: 100vh;
+            overflow-y: auto;
+            scrollbar-gutter: stable both-edges;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+        .app-shell-content {
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 100%;
+        }
+        .app-shell h1 { color: #4CAF50; margin-bottom: 0.5rem; font-size: 2.5rem; }
+        .app-shell p { max-width: 600px; line-height: 1.6; opacity: 0.8; }
+        .app-shell .qa-section {
+            margin-top: 3rem;
+            text-align: left;
+            max-width: 800px;
+            width: 100%;
+        }
+        .app-shell .qa-item { margin-bottom: 1.5rem; }
+        .app-shell .qa-item h2 { font-size: 1.2rem; margin-bottom: 0.5rem; color: #81C784; }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-left-color: #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+<link rel="modulepreload" href="./lrc-editor-54f5447948d4892.js" crossorigin="anonymous" integrity="sha384-Gvm316aNCKx4UD2IgKKIbgAOBdQRsHTEuxyYnWZ3d8kpgw9fnsdXYq2g8liN5fWw"><link rel="modulepreload" href="./snippets/lrc-editor-0bd986aba0915f0d/inline0.js" crossorigin="anonymous" integrity="sha384-dwx6MjIC3Nrxjc46/MHUTjLm1JobpWwTB86FIjB3xszaRoeZitj2S58aZFQw0T5Q"><link rel="preload" href="./lrc-editor-54f5447948d4892_bg.wasm" crossorigin="anonymous" integrity="sha384-1Eqh4lN8HUI9u+o+h30hJMTSBhtNVWjwLz6Q1GHGFFchiOZghQfAWzonsOYxRZuw" as="fetch" type="application/wasm"></head>
+<body>
+    <div id="app">
+        <!-- App Shell: Visible to crawlers and users during WASM initialization -->
+        <section class="app-shell">
+            <div class="app-shell-content">
+                <div class="loading-spinner"></div>
+                <h1>LRC Editor</h1>
+                <p>Loading your free web-based lyric editor...</p>
+
+                <div class="qa-section">
+                    <div class="qa-item">
+                        <h2>What is an LRC Editor?</h2>
+                        <p>An LRC editor is a tool used to create and synchronize lyrics with audio files. This free web-based LRC maker allows you to generate timed lyrics for songs, making it perfect for karaoke, music videos, and lyric-synchronized music players. Unlike basic text editors, this tool provides a visual timeline for precise timing.</p>
+                    </div>
+                    <div class="qa-item">
+                        <h2>How do I synchronize lyrics for free?</h2>
+                        <p>You can synchronize lyrics for free using our intuitive chunk-based lyric creator. Simply paste your lyrics, split them into chunks, and drag them onto the audio timeline. You can adjust the start and end times of every word or phrase with millisecond precision without downloading any software.</p>
+                    </div>
+                    <div class="qa-item">
+                        <h2>Is this LRC maker private and secure?</h2>
+                        <p>Yes. This application runs entirely in your browser using WebAssembly. Your audio files and lyric data never leave your computer, ensuring 100% privacy. It works offline once loaded and is a secure alternative to online tools that require file uploads.</p>
+                    </div>
+                    <div class="qa-item">
+                        <h2>Where can I use .lrc files?</h2>
+                        <p>LRC files created here are compatible with all major music players and karaoke systems that support timed lyrics. You can use them in mobile music apps, desktop players, and even for creating lyric videos on social media platforms.</p>
+                    </div>
+                    <div class="qa-item">
+                        <h2>Which audio formats are supported?</h2>
+                        <p>Our web-based tool supports common audio formats including MP3, WAV, and OGG. You can import your music file and immediately start creating synchronized timed lyrics in your browser.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
+/div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
