@@ -16,13 +16,13 @@
             <div id="labels-line-container"></div>
             <div id="current-line-viewport">
               <div id="current-line-container"></div>
-              <div id="counter">x4</div>
+              <div id="counter"></div>
             </div>
           </div>
           <div id="next-line-container"></div>
         </div>
-        <button id="play-pause" type="button"></button>
-        <div id="scroll-hint">
+        <button id="play-pause" type="button" aria-label="Play"></button>
+        <div id="scroll-hint" aria-hidden="true">
           <div class="scroll-text">scroll down for options</div>
           <div class="arrow">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg>
@@ -30,7 +30,7 @@
         </div>
       </div>
       <div id="options-mount"></div>
-      <button id="back-to-top" type="button">
+      <button id="back-to-top" type="button" aria-label="Back to top">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6" /></svg>
         <span>TOP</span>
       </button>

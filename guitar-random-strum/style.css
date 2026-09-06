@@ -1,4 +1,6 @@
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -9,6 +11,14 @@
   --accent: #e8734d;
   --panel: #17181a;
   --panel-alt: #232427;
+
+  /* The stage picks a random hue on load; these fall back to the base palette. */
+  --stage-bg: var(--bg);
+  --stage-fg: var(--fg);
+  --stage-panel-alt: var(--panel-alt);
+
+  --slot-width: 3rem;
+  --slot-gap: 1.4rem;
 }
 
 html,
@@ -21,9 +31,29 @@ body {
   overscroll-behavior-y: none;
 }
 
-#app {
-  min-height: 100%;
+/* Buttons share a flat, chrome-free look. */
+#play-pause,
+#back-to-top,
+.tap-target {
+  appearance: none;
+  border: none;
+  border-radius: 0;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
 }
+
+/* No ring on click, but keyboard focus stays visible. */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --- Stage ---------------------------------------------------------------- */
 
 #stage {
   position: relative;
@@ -35,7 +65,7 @@ body {
   justify-content: center;
   gap: 2.5rem;
   padding: 2rem;
-  background: var(--stage-bg, var(--bg));
+  background: var(--stage-bg);
 }
 
 #pattern-block {
@@ -66,38 +96,39 @@ body {
   z-index: 1;
 }
 
-
 #next-line-container {
   grid-row: 2;
   grid-column: 2;
   justify-self: center;
+  opacity: 0.32;
 }
 
-.pattern-line {
-  display: flex;
-  gap: 1.4rem;
-}
+/* --- Pattern lines -------------------------------------------------------- */
 
+.pattern-line,
 .highlight-row {
   display: flex;
-  gap: 1.4rem;
-  height: 100%;
+  gap: var(--slot-gap);
 }
 
+.slot,
 .highlight-cell {
-  width: 3rem;
+  width: var(--slot-width);
+}
+
+.highlight-row,
+.highlight-cell {
   height: 100%;
 }
 
 .highlight-cell.current {
-  background: var(--stage-panel-alt, var(--panel-alt));
+  background: var(--stage-panel-alt);
 }
 
 .slot {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 3rem;
   padding: 0.4rem 0.5rem;
 }
 
@@ -105,7 +136,7 @@ body {
   font-size: 2.6rem;
   font-weight: 700;
   line-height: 1.1;
-  color: var(--stage-fg, var(--fg));
+  color: var(--stage-fg);
 }
 
 .slot-letter {
@@ -116,12 +147,20 @@ body {
   color: var(--accent);
 }
 
+/* On the slot being played, label and letter trade colours. */
 .slot.current .slot-label {
   color: var(--accent);
 }
 
 .slot.current .slot-letter {
-  color: var(--stage-fg, var(--fg));
+  color: var(--stage-fg);
+}
+
+/* Copy of the retired line, animated out over its old position. */
+.swap-ghost {
+  position: fixed;
+  z-index: 5;
+  pointer-events: none;
 }
 
 #counter {
@@ -141,23 +180,17 @@ body {
   display: none;
 }
 
-#next-line-container {
-  opacity: 0.32;
-}
+/* --- Transport and navigation --------------------------------------------- */
 
 #play-pause {
-  appearance: none;
-  border: none;
-  border-radius: 0;
   background: var(--accent);
-  color: #14161a;
+  color: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
   width: 4.6rem;
   height: 2.6rem;
   padding: 0;
-  cursor: pointer;
 }
 
 #play-pause:hover {
@@ -166,11 +199,6 @@ body {
 
 #play-pause:active {
   filter: brightness(0.9);
-}
-
-#play-pause:focus,
-#play-pause:focus-visible {
-  outline: none;
 }
 
 #scroll-hint {
@@ -191,15 +219,15 @@ body {
   pointer-events: none;
 }
 
-#scroll-hint .arrow {
-  display: flex;
-  animation: bounce 1.6s infinite;
-}
-
 #scroll-hint .scroll-text {
   font-size: 0.85rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+#scroll-hint .arrow {
+  display: flex;
+  animation: bounce 1.6s infinite;
 }
 
 @keyframes bounce {
@@ -212,16 +240,6 @@ body {
   }
 }
 
-#options-mount {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 3rem 1.5rem 10rem;
-  background: var(--panel);
-  overscroll-behavior-y: none;
-}
-
 #back-to-top {
   position: fixed;
   bottom: 1.5rem;
@@ -230,16 +248,11 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  appearance: none;
-  border: none;
-  border-radius: 0;
   background: var(--panel-alt);
   color: var(--fg);
   font-size: 0.85rem;
-  font-weight: 700;
   letter-spacing: 0.06em;
   padding: 0.7rem 1rem;
-  cursor: pointer;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
@@ -254,9 +267,16 @@ body {
   filter: brightness(1.2);
 }
 
-#back-to-top:focus,
-#back-to-top:focus-visible {
-  outline: none;
+/* --- Options -------------------------------------------------------------- */
+
+#options-mount {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.5rem 10rem;
+  background: var(--panel);
+  overscroll-behavior-y: none;
 }
 
 .options {
@@ -299,12 +319,6 @@ body {
   appearance: none;
   height: 0.5rem;
   background: var(--panel-alt);
-  outline: none;
-}
-
-.option-slider:focus,
-.option-slider:focus-visible {
-  outline: none;
 }
 
 .option-slider::-webkit-slider-thumb {
@@ -332,28 +346,24 @@ body {
 }
 
 .tap-target {
-  appearance: none;
-  border: none;
-  border-radius: 0;
   background: var(--panel-alt);
   color: var(--fg);
   font-size: 1rem;
-  font-weight: 700;
   min-width: 2.6rem;
   padding: 0.6rem 0.5rem;
-  cursor: pointer;
 }
 
 .tap-target:hover {
   filter: brightness(1.2);
 }
 
-.tap-target:focus,
-.tap-target:focus-visible {
-  outline: none;
-}
-
 .tap-target.selected {
   background: var(--accent);
-  color: #14161a;
+  color: var(--bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #scroll-hint .arrow {
+    animation: none;
+  }
 }

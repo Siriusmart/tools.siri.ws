@@ -1,13 +1,14 @@
+/**
+ * Tints the stage a random hue on each load, so a practice session is visually
+ * distinct from the last. Only the stage variables change; the options panel
+ * keeps the base palette.
+ */
 export function applyRandomStageTheme(): void {
   const hue = Math.floor(Math.random() * 360);
-  const bg = `hsl(${hue}, 32%, 8%)`;
-  const panelAlt = `hsl(${hue}, 28%, 17%)`;
-  const fg = `hsl(${hue}, 55%, 82%)`;
-  const accent = `hsl(${hue}, 70%, 60%)`;
+  const style = document.documentElement.style;
 
-  const root = document.documentElement.style;
-  root.setProperty('--stage-bg', bg);
-  root.setProperty('--stage-panel-alt', panelAlt);
-  root.setProperty('--stage-fg', fg);
-  root.setProperty('--accent', accent);
+  style.setProperty('--stage-bg', `hsl(${hue}, 32%, 8%)`);
+  style.setProperty('--stage-panel-alt', `hsl(${hue}, 28%, 17%)`);
+  style.setProperty('--stage-fg', `hsl(${hue}, 55%, 82%)`);
+  style.setProperty('--accent', `hsl(${hue}, 70%, 60%)`);
 }
