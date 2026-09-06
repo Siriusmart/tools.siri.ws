@@ -46,11 +46,26 @@ body {
   width: 100%;
 }
 
-#current-line-container {
+#current-section {
+  position: relative;
   grid-row: 1;
   grid-column: 2;
   justify-self: center;
 }
+
+#current-highlight {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#labels-line-container,
+#current-line-viewport {
+  position: relative;
+  z-index: 1;
+}
+
 
 #counter {
   grid-row: 1;
@@ -70,16 +85,27 @@ body {
   gap: 1.4rem;
 }
 
+.highlight-row {
+  display: flex;
+  gap: 1.4rem;
+  height: 100%;
+}
+
+.highlight-cell {
+  width: 3rem;
+  height: 100%;
+}
+
+.highlight-cell.current {
+  background: var(--stage-panel-alt, var(--panel-alt));
+}
+
 .slot {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 2.2rem;
+  width: 3rem;
   padding: 0.4rem 0.5rem;
-}
-
-.slot.current {
-  background: var(--stage-panel-alt, var(--panel-alt));
 }
 
 .slot-label {
@@ -103,12 +129,6 @@ body {
 
 .slot.current .slot-letter {
   color: var(--stage-fg, var(--fg));
-}
-
-.slot-label.hidden-label {
-  visibility: hidden;
-  height: 0;
-  overflow: hidden;
 }
 
 #counter {

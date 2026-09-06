@@ -1,7 +1,7 @@
 import { loadSettings, saveSettings } from './settings.js';
 import { generatePattern } from './pattern.js';
 import { Metronome } from './metronome.js';
-import { renderPatternLine, highlightSlot, renderOptions } from './ui.js';
+import { renderLabelsLine, renderLettersLine, renderHighlightRow, highlightSlot, renderOptions } from './ui.js';
 import { applyRandomStageTheme } from './theme.js';
 import type { Pattern } from './types.js';
 
@@ -12,9 +12,13 @@ const settings = loadSettings();
 let currentPattern: Pattern = generatePattern(settings);
 let nextPattern: Pattern = generatePattern(settings);
 let repeatsLeft = settings.repeats;
-let currentLineEl: HTMLDivElement;
+let currentLettersEl: HTMLDivElement;
+let labelsLineEl: HTMLDivElement;
+let highlightRowEl: HTMLDivElement;
 
+const labelsContainer = document.getElementById('labels-line-container') as HTMLDivElement;
 const currentContainer = document.getElementById('current-line-container') as HTMLDivElement;
+const highlightContainer = document.getElementById('current-highlight') as HTMLDivElement;
 const nextContainer = document.getElementById('next-line-container') as HTMLDivElement;
 const counterEl = document.getElementById('counter') as HTMLDivElement;
 const playPauseBtn = document.getElementById('play-pause') as HTMLButtonElement;
@@ -23,31 +27,97 @@ const scrollHint = document.getElementById('scroll-hint') as HTMLDivElement;
 const backToTopBtn = document.getElementById('back-to-top') as HTMLButtonElement;
 
 function renderCurrent(): void {
-  currentLineEl = renderPatternLine(currentPattern);
-  currentContainer.replaceChildren(currentLineEl);
+  labelsLineEl = renderLabelsLine(settings.beatsPerPattern);
+  labelsContainer.replaceChildren(labelsLineEl);
+  highlightRowEl = renderHighlightRow(settings.beatsPerPattern);
+  highlightContainer.replaceChildren(highlightRowEl);
+  currentLettersEl = renderLettersLine(currentPattern);
+  currentContainer.replaceChildren(currentLettersEl);
   counterEl.textContent = `x${repeatsLeft}`;
 }
 
 function renderNext(): void {
-  nextContainer.replaceChildren(renderPatternLine(nextPattern, false));
+  nextContainer.replaceChildren(renderLettersLine(nextPattern));
 }
 
 renderCurrent();
 renderNext();
 
+const SWAP_ANIM_MS = 280;
+
+function animateLineSwap(
+  outgoingLineEl: HTMLDivElement,
+  outgoingRect: DOMRect,
+  incomingStartRect: DOMRect,
+): void {
+  const ghostViewport = document.createElement('div');
+  ghostViewport.style.position = 'fixed';
+  ghostViewport.style.left = `${outgoingRect.left}px`;
+  ghostViewport.style.top = `${outgoingRect.top}px`;
+  ghostViewport.style.width = `${outgoingRect.width}px`;
+  ghostViewport.style.height = `${outgoingRect.height}px`;
+  ghostViewport.style.pointerEvents = 'none';
+  document.body.appendChild(ghostViewport);
+
+  const ghost = outgoingLineEl.cloneNode(true) as HTMLDivElement;
+  ghost.style.margin = '0';
+  ghost.style.transition = `transform ${SWAP_ANIM_MS}ms ease, opacity ${SWAP_ANIM_MS}ms ease`;
+  ghostViewport.appendChild(ghost);
+
+  requestAnimationFrame(() => {
+    ghost.style.transform = 'translateY(-100%)';
+    ghost.style.opacity = '0';
+  });
+  setTimeout(() => ghostViewport.remove(), SWAP_ANIM_MS + 30);
+
+  const newCurrentRect = currentContainer.getBoundingClientRect();
+  const dy = incomingStartRect.top - newCurrentRect.top;
+  currentContainer.style.transition = 'none';
+  currentContainer.style.transform = `translateY(${dy}px)`;
+  currentContainer.style.opacity = '0.32';
+  void currentContainer.offsetHeight;
+  currentContainer.style.transition = `transform ${SWAP_ANIM_MS}ms ease, opacity ${SWAP_ANIM_MS}ms ease`;
+  requestAnimationFrame(() => {
+    currentContainer.style.transform = '';
+    currentContainer.style.opacity = '';
+  });
+  setTimeout(() => {
+    currentContainer.style.transition = '';
+  }, SWAP_ANIM_MS + 30);
+
+  nextContainer.style.transition = 'none';
+  nextContainer.style.transform = `translateY(${Math.abs(dy)}px)`;
+  nextContainer.style.opacity = '0';
+  void nextContainer.offsetHeight;
+  nextContainer.style.transition = `transform ${SWAP_ANIM_MS}ms ease, opacity ${SWAP_ANIM_MS}ms ease`;
+  requestAnimationFrame(() => {
+    nextContainer.style.transform = '';
+    nextContainer.style.opacity = '';
+  });
+  setTimeout(() => {
+    nextContainer.style.transition = '';
+  }, SWAP_ANIM_MS + 30);
+}
+
 const metronome = new Metronome(
   (slotIndex) => {
-    highlightSlot(currentLineEl, slotIndex);
+    highlightSlot(labelsLineEl, currentLettersEl, highlightRowEl, slotIndex);
   },
   () => {
     repeatsLeft--;
     if (repeatsLeft <= 0) {
+      const outgoingLineEl = currentLettersEl;
+      const outgoingRect = currentContainer.getBoundingClientRect();
+      const incomingStartRect = nextContainer.getBoundingClientRect();
+
       currentPattern = nextPattern;
       nextPattern = generatePattern(settings);
       repeatsLeft = settings.repeats;
       renderCurrent();
       renderNext();
       metronome.setTotalSlots(currentPattern.length);
+
+      animateLineSwap(outgoingLineEl, outgoingRect, incomingStartRect);
     } else {
       counterEl.textContent = `x${repeatsLeft}`;
     }

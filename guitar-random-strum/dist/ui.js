@@ -1,16 +1,28 @@
-export function renderPatternLine(pattern, withLabels = true) {
+export function renderLabelsLine(beatsPerPattern) {
     const line = document.createElement('div');
     line.className = 'pattern-line';
-    pattern.forEach((slot, i) => {
+    const slotCount = beatsPerPattern * 2;
+    for (let i = 0; i < slotCount; i++) {
         const isMainBeat = i % 2 === 0;
         const label = isMainBeat ? String(i / 2 + 1) : '+';
         const col = document.createElement('div');
         col.className = 'slot';
         col.dataset.index = String(i);
         const labelEl = document.createElement('div');
-        labelEl.className = withLabels ? 'slot-label' : 'slot-label hidden-label';
+        labelEl.className = 'slot-label';
         labelEl.textContent = label;
         col.appendChild(labelEl);
+        line.appendChild(col);
+    }
+    return line;
+}
+export function renderLettersLine(pattern) {
+    const line = document.createElement('div');
+    line.className = 'pattern-line';
+    pattern.forEach((slot, i) => {
+        const col = document.createElement('div');
+        col.className = 'slot';
+        col.dataset.index = String(i);
         const letterEl = document.createElement('div');
         letterEl.className = 'slot-letter';
         letterEl.textContent = slot.active ? slot.direction : '';
@@ -19,12 +31,29 @@ export function renderPatternLine(pattern, withLabels = true) {
     });
     return line;
 }
-export function highlightSlot(line, slotIndex) {
-    line.querySelectorAll('.slot').forEach((el) => el.classList.remove('current'));
+export function renderHighlightRow(beatsPerPattern) {
+    const row = document.createElement('div');
+    row.className = 'highlight-row';
+    const slotCount = beatsPerPattern * 2;
+    for (let i = 0; i < slotCount; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'highlight-cell';
+        cell.dataset.index = String(i);
+        row.appendChild(cell);
+    }
+    return row;
+}
+export function highlightSlot(labelsLine, lettersLine, highlightRow, slotIndex) {
+    labelsLine.querySelectorAll('.slot').forEach((el) => el.classList.remove('current'));
+    lettersLine.querySelectorAll('.slot').forEach((el) => el.classList.remove('current'));
+    highlightRow.querySelectorAll('.highlight-cell').forEach((el) => el.classList.remove('current'));
     if (slotIndex === null)
         return;
-    const el = line.querySelector(`.slot[data-index="${slotIndex}"]`);
-    el?.classList.add('current');
+    labelsLine.querySelector(`.slot[data-index="${slotIndex}"]`)?.classList.add('current');
+    lettersLine.querySelector(`.slot[data-index="${slotIndex}"]`)?.classList.add('current');
+    highlightRow
+        .querySelector(`.highlight-cell[data-index="${slotIndex}"]`)
+        ?.classList.add('current');
 }
 export function renderOptions(settings, callbacks) {
     const root = document.createElement('div');
