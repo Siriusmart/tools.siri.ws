@@ -20,6 +20,9 @@ const playPauseBtn = document.getElementById('play-pause');
 const optionsMount = document.getElementById('options-mount');
 const scrollHint = document.getElementById('scroll-hint');
 const backToTopBtn = document.getElementById('back-to-top');
+function updateCounterVisibility() {
+    counterEl.classList.toggle('hidden', settings.repeats <= 1);
+}
 function renderCurrent() {
     labelsLineEl = renderLabelsLine(settings.beatsPerPattern);
     labelsContainer.replaceChildren(labelsLineEl);
@@ -28,6 +31,7 @@ function renderCurrent() {
     currentLettersEl = renderLettersLine(currentPattern);
     currentContainer.replaceChildren(currentLettersEl);
     counterEl.textContent = `x${repeatsLeft}`;
+    updateCounterVisibility();
 }
 function renderNext() {
     nextContainer.replaceChildren(renderLettersLine(nextPattern));
@@ -164,6 +168,7 @@ optionsMount.appendChild(renderOptions(settings, {
             repeatsLeft = repeats;
             counterEl.textContent = `x${repeatsLeft}`;
         }
+        updateCounterVisibility();
     },
     onAllowSkipChange: (allow) => {
         settings.allowSkippedFirstBeat = allow;

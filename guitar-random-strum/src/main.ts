@@ -26,6 +26,10 @@ const optionsMount = document.getElementById('options-mount') as HTMLDivElement;
 const scrollHint = document.getElementById('scroll-hint') as HTMLDivElement;
 const backToTopBtn = document.getElementById('back-to-top') as HTMLButtonElement;
 
+function updateCounterVisibility(): void {
+  counterEl.classList.toggle('hidden', settings.repeats <= 1);
+}
+
 function renderCurrent(): void {
   labelsLineEl = renderLabelsLine(settings.beatsPerPattern);
   labelsContainer.replaceChildren(labelsLineEl);
@@ -34,6 +38,7 @@ function renderCurrent(): void {
   currentLettersEl = renderLettersLine(currentPattern);
   currentContainer.replaceChildren(currentLettersEl);
   counterEl.textContent = `x${repeatsLeft}`;
+  updateCounterVisibility();
 }
 
 function renderNext(): void {
@@ -195,6 +200,7 @@ optionsMount.appendChild(
         repeatsLeft = repeats;
         counterEl.textContent = `x${repeatsLeft}`;
       }
+      updateCounterVisibility();
     },
     onAllowSkipChange: (allow) => {
       settings.allowSkippedFirstBeat = allow;
