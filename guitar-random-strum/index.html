@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Guitar Strum Trainer</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="stage">
+        <div id="pattern-block">
+          <div id="current-line-container"></div>
+          <div id="counter">x4</div>
+          <div id="next-line-container"></div>
+        </div>
+        <button id="play-pause" type="button"></button>
+        <div id="scroll-hint">
+          <div class="arrow">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg>
+          </div>
+          <div class="scroll-text">scroll down for options</div>
+        </div>
+      </div>
+      <div id="options-mount"></div>
+      <button id="back-to-top" type="button">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6" /></svg>
+        <span>TOP</span>
+      </button>
+    </div>
+    <script type="module" src="./dist/main.js"></script>
+  </body>
+</html>

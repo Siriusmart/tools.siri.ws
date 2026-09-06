@@ -1,0 +1,11 @@
+{
+  "name": "guitar-random-strum",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}
